@@ -1,4 +1,4 @@
-package service
+package services
 
 import (
     "context"
@@ -16,17 +16,13 @@ func NewUserService(conn *sql.DB) *UserService {
     }
 }
 
-func (s *UserService) CreateUser(ctx context.Context, name, email, phone string) (db.User, error) {
-    params := db.CreateUserParams{
-        Name:  name,
-        Email: email,
+func (s *UserService) CreateUser(ctx context.Context, params db.CreateUserParams) (db.User, error) {
+    if params.Phone.String != "" {
+        params.Phone.Valid = true
+    } else {
+        params.Phone.Valid = false
     }
-    
-    // Adiciona phone se fornecido
-    if phone != "" {
-        params.Phone = sql.NullString{String: phone, Valid: true}
-    }
-    
+
     return s.queries.CreateUser(ctx, params)
 }
 
@@ -38,19 +34,16 @@ func (s *UserService) ListUsers(ctx context.Context) ([]db.User, error) {
     return s.queries.ListUsers(ctx)
 }
 
-func (s *UserService) UpdateUser(ctx context.Context, id int32, name, email, phone string) (db.User, error) {
-    params := db.UpdateUserParams{
-        ID:    id,
-        Name:  name,
-        Email: email,
+func (s *UserService) UpdateUser(ctx context.Context, params db.UpdateUserParams) (db.User, error) {
+    if params.Phone.String != "" {
+        params.Phone.Valid = true
+    } else {
+        params.Phone.Valid = false
     }
-    
-    if phone != "" {
-        params.Phone = sql.NullString{String: phone, Valid: true}
-    }
-    
+
     return s.queries.UpdateUser(ctx, params)
 }
+
 
 func (s *UserService) DeleteUser(ctx context.Context, id int32) error {
     return s.queries.DeleteUser(ctx, id)

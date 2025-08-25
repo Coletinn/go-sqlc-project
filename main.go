@@ -1,72 +1,38 @@
 package main
 
 import (
-    "context"
-    "database/sql"
-    "fmt"
-    "math/rand"
-    "os"
-    "time"
+	"database/sql"
+	"log"
+	"sqlc-testing/api"
+	"sqlc-testing/services"
 
-    _ "github.com/lib/pq"
-    "sqlc-testing/services"
+	_ "github.com/lib/pq"
 )
 
-func generateRandomUser() (string, string, string) {
-    names := []string{"Alice", "Bob", "Carol", "David", "Eva"}
-    emails := []string{"alice@test.com", "bob@test.com", "carol@test.com", "david@test.com", "eva@test.com"}
-    phones := []string{"111-222-333", "222-333-444", "333-444-555", "444-555-666", "555-666-777"}
-
-    return names[rand.Intn(len(names))],
-        emails[rand.Intn(len(emails))],
-        phones[rand.Intn(len(phones))]
-}
+const (
+	dbDriver      = "postgres"
+	dbSource      = "postgresql://gustavo:1910@localhost:5432/postgres?sslmode=disable"
+	serverAddress = "0.0.0.0:8080"
+)
 
 func main() {
-    rand.Seed(time.Now().UnixNano())
+	// Connect to the database
+	conn, err := sql.Open(dbDriver, dbSource)
+	if err != nil {
+		log.Fatal("Cannot connect to database:", err)
+	}
+	defer conn.Close()
 
-    dsn := os.Getenv("DATABASE_URL")
-    if dsn == "" {
-        dsn = "postgres://gustavo:1910@localhost:5432/postgres?sslmode=disable"
-    }
+	if err := conn.Ping(); err != nil {
+		log.Fatal("Database unreachable:", err)
+	}
 
-    conn, err := sql.Open("postgres", dsn)
-    if err != nil {
-        panic(err)
-    }
-    defer conn.Close()
+	userService := services.NewUserService(conn)
 
-    if err := conn.Ping(); err != nil {
-        panic(fmt.Sprintf("database not reachable: %v", err))
-    }
+	server := api.NewServer(userService)
 
-    userService := service.NewUserService(conn)
-
-    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-    defer cancel()
-
-    name, email, phone := generateRandomUser()
-
-    user, err := userService.CreateUser(ctx, name, email, phone)
-    if err != nil {
-        panic(err)
-    }
-
-    fmt.Println("Created user:", user)
-
-    // Buscar o mesmo usuário
-    found, err := userService.GetUserByID(ctx, user.ID)
-    if err != nil {
-        panic(err)
-    }
-
-    fmt.Println("Fetched user:", found)
-
-    // Listar todos usuários
-    users, err := userService.ListUsers(ctx)
-    if err != nil {
-        panic(err)
-    }
-
-    fmt.Println("All users:", users)
+	log.Printf("Server running on %s\n", serverAddress)
+	if err := server.Start(serverAddress); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }
