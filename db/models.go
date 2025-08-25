@@ -39,8 +39,8 @@ type Product struct {
 
 type Store struct {
 	StoreID   int32
-	Address   string
 	Name      string
+	Address   string
 	Phone     sql.NullString
 	CreatedAt sql.NullTime
 }

@@ -8,8 +8,8 @@ CREATE TABLE users (
 
 CREATE TABLE stores (
     store_id SERIAL PRIMARY KEY,
-    address TEXT NOT NULL,
     name TEXT NOT NULL,
+    address TEXT NOT NULL,
     phone TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

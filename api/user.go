@@ -30,7 +30,7 @@ func (server *Server) getUserByID(ctx *gin.Context) {
         return
     }
 
-    user, err := server.userService.GetUserByID(ctx, int32(requestId))
+    user, err := server.services.User.GetUserByID(ctx, int32(requestId))
     if err != nil {
         ctx.JSON(404, gin.H{"error": "user not found"})
         return
@@ -40,7 +40,7 @@ func (server *Server) getUserByID(ctx *gin.Context) {
 }
 
 func (server *Server) getAllUsers(ctx *gin.Context) {
-	users, err := server.userService.ListUsers(ctx)
+	users, err := server.services.User.ListUsers(ctx)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": "can't fetch users"})
         return
@@ -62,7 +62,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 		Phone: utils.NullString(req.Phone),
 	}
 
-	user, err := server.userService.CreateUser(ctx, params)
+	user, err := server.services.User.CreateUser(ctx, params)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
@@ -85,7 +85,7 @@ func (server *Server) updateUser(ctx *gin.Context) {
         return
     }
 
-    user, err := server.userService.GetUserByID(ctx, int32(requestId))
+    user, err := server.services.User.GetUserByID(ctx, int32(requestId))
     if err != nil {
         ctx.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
         return
@@ -108,7 +108,7 @@ func (server *Server) updateUser(ctx *gin.Context) {
         params.Phone = utils.NullString(*req.Phone)
     }
 
-    updatedUser, err := server.userService.UpdateUser(ctx, params)
+    updatedUser, err := server.services.User.UpdateUser(ctx, params)
     if err != nil {
         ctx.JSON(http.StatusInternalServerError, errorResponse(err))
         return
@@ -125,7 +125,7 @@ func (server *Server) deleteUser(ctx *gin.Context) {
         return
     }
 
-	err = server.userService.DeleteUser(ctx, int32(requestId))
+	err = server.services.User.DeleteUser(ctx, int32(requestId))
     if err != nil {
         ctx.JSON(404, gin.H{"error": "user not found"})
         return

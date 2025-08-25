@@ -27,9 +27,9 @@ func main() {
 		log.Fatal("Database unreachable:", err)
 	}
 
-	userService := services.NewUserService(conn)
+	services := services.NewServices(conn)
 
-	server := api.NewServer(userService)
+	server := api.NewServer(services)
 
 	log.Printf("Server running on %s\n", serverAddress)
 	if err := server.Start(serverAddress); err != nil {

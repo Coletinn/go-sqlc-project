@@ -7,28 +7,33 @@ import (
 
 type Server struct {
 	router *gin.Engine
-	userService *services.UserService
+	services *services.Services
 }
 
-func NewServer(userService *services.UserService) *Server {
+func NewServer(svcs *services.Services) *Server {
 	server := &Server{
 		router: gin.Default(),
-		userService: userService,
+		services: svcs,
 	}
 	server.setupRoutes()
 	return server
 }
 
-func (s *Server) setupRoutes() {
-	api := s.router.Group("/api")
+func (server *Server) setupRoutes() {
+	api := server.router.Group("/api")
 	{
 		users := api.Group("/users")
 		{
-			users.GET("/", s.getAllUsers)
-			users.GET("/:id", s.getUserByID)
-			users.POST("/", s.createUser)
-			users.PATCH("/:id", s.updateUser)
-			users.DELETE("/:id", s.deleteUser)
+			users.GET("/", server.getAllUsers)
+			users.GET("/:id", server.getUserByID)
+			users.POST("/", server.createUser)
+			users.PATCH("/:id", server.updateUser)
+			users.DELETE("/:id", server.deleteUser)
+		}
+		stores := api.Group("/stores")
+		{
+			stores.GET("/", server.getAllStores)
+			stores.POST("/", server.createStore)
 		}
 	}
 }

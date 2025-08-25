@@ -149,17 +149,9 @@ type CreateStoreParams struct {
 	Phone   sql.NullString
 }
 
-type CreateStoreRow struct {
-	StoreID   int32
-	Name      string
-	Address   string
-	Phone     sql.NullString
-	CreatedAt sql.NullTime
-}
-
-func (q *Queries) CreateStore(ctx context.Context, arg CreateStoreParams) (CreateStoreRow, error) {
+func (q *Queries) CreateStore(ctx context.Context, arg CreateStoreParams) (Store, error) {
 	row := q.db.QueryRowContext(ctx, createStore, arg.Name, arg.Address, arg.Phone)
-	var i CreateStoreRow
+	var i Store
 	err := row.Scan(
 		&i.StoreID,
 		&i.Name,
@@ -579,18 +571,10 @@ const getStoreByID = `-- name: GetStoreByID :one
 SELECT store_id, name, address, phone, created_at FROM stores WHERE store_id = $1
 `
 
-type GetStoreByIDRow struct {
-	StoreID   int32
-	Name      string
-	Address   string
-	Phone     sql.NullString
-	CreatedAt sql.NullTime
-}
-
 // Stores queries
-func (q *Queries) GetStoreByID(ctx context.Context, storeID int32) (GetStoreByIDRow, error) {
+func (q *Queries) GetStoreByID(ctx context.Context, storeID int32) (Store, error) {
 	row := q.db.QueryRowContext(ctx, getStoreByID, storeID)
-	var i GetStoreByIDRow
+	var i Store
 	err := row.Scan(
 		&i.StoreID,
 		&i.Name,
@@ -911,23 +895,15 @@ SELECT store_id, name, address, phone, created_at FROM stores
 ORDER BY created_at DESC
 `
 
-type ListStoresRow struct {
-	StoreID   int32
-	Name      string
-	Address   string
-	Phone     sql.NullString
-	CreatedAt sql.NullTime
-}
-
-func (q *Queries) ListStores(ctx context.Context) ([]ListStoresRow, error) {
+func (q *Queries) ListStores(ctx context.Context) ([]Store, error) {
 	rows, err := q.db.QueryContext(ctx, listStores)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []ListStoresRow
+	var items []Store
 	for rows.Next() {
-		var i ListStoresRow
+		var i Store
 		if err := rows.Scan(
 			&i.StoreID,
 			&i.Name,
@@ -1120,22 +1096,14 @@ type UpdateStoreParams struct {
 	Phone   sql.NullString
 }
 
-type UpdateStoreRow struct {
-	StoreID   int32
-	Name      string
-	Address   string
-	Phone     sql.NullString
-	CreatedAt sql.NullTime
-}
-
-func (q *Queries) UpdateStore(ctx context.Context, arg UpdateStoreParams) (UpdateStoreRow, error) {
+func (q *Queries) UpdateStore(ctx context.Context, arg UpdateStoreParams) (Store, error) {
 	row := q.db.QueryRowContext(ctx, updateStore,
 		arg.StoreID,
 		arg.Name,
 		arg.Address,
 		arg.Phone,
 	)
-	var i UpdateStoreRow
+	var i Store
 	err := row.Scan(
 		&i.StoreID,
 		&i.Name,
