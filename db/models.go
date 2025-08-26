@@ -12,7 +12,7 @@ type Order struct {
 	OrderID         int32
 	UserID          int32
 	StoreID         int32
-	TotalAmount     string
+	TotalAmount     float64
 	Status          string
 	DeliveryAddress string
 	OrderDate       sql.NullTime
@@ -23,15 +23,15 @@ type OrderItem struct {
 	OrderID     int32
 	ProductID   int32
 	Quantity    int32
-	UnitPrice   string
-	TotalPrice  string
+	UnitPrice   float64
+	TotalPrice  float64
 }
 
 type Product struct {
 	ProductID   int32
 	Name        string
 	Description sql.NullString
-	Price       string
+	Price       float64
 	Sku         string
 	Category    sql.NullString
 	CreatedAt   sql.NullTime

@@ -8,3 +8,6 @@ sql:
         package: "db"
         out: "db"
         sql_package: "database/sql"
+        overrides:
+          - db_type: "pg_catalog.numeric"
+            go_type: "float64"

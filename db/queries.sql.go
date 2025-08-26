@@ -44,7 +44,7 @@ RETURNING order_id, user_id, store_id, total_amount, status, delivery_address, o
 type CreateOrderParams struct {
 	UserID          int32
 	StoreID         int32
-	TotalAmount     string
+	TotalAmount     float64
 	DeliveryAddress string
 }
 
@@ -78,8 +78,8 @@ type CreateOrderItemParams struct {
 	OrderID    int32
 	ProductID  int32
 	Quantity   int32
-	UnitPrice  string
-	TotalPrice string
+	UnitPrice  float64
+	TotalPrice float64
 }
 
 func (q *Queries) CreateOrderItem(ctx context.Context, arg CreateOrderItemParams) (OrderItem, error) {
@@ -111,7 +111,7 @@ RETURNING product_id, name, description, price, sku, category, created_at
 type CreateProductParams struct {
 	Name        string
 	Description sql.NullString
-	Price       string
+	Price       float64
 	Sku         string
 	Category    sql.NullString
 }
@@ -262,7 +262,7 @@ type GetInventoryByStoreRow struct {
 	Quantity    int32
 	LastUpdated sql.NullTime
 	ProductName string
-	Price       string
+	Price       float64
 	Sku         string
 }
 
@@ -358,8 +358,8 @@ type GetOrderItemsByOrderIDRow struct {
 	OrderID     int32
 	ProductID   int32
 	Quantity    int32
-	UnitPrice   string
-	TotalPrice  string
+	UnitPrice   float64
+	TotalPrice  float64
 	ProductName string
 	Sku         string
 }
@@ -417,7 +417,7 @@ type GetOrderWithItemsRow struct {
 	OrderID         int32
 	UserID          int32
 	StoreID         int32
-	TotalAmount     string
+	TotalAmount     float64
 	Status          string
 	DeliveryAddress string
 	OrderDate       sql.NullTime
@@ -530,7 +530,7 @@ type GetProductsAvailableInStoreRow struct {
 	ProductID   int32
 	Name        string
 	Description sql.NullString
-	Price       string
+	Price       float64
 	Sku         string
 	Category    sql.NullString
 	Quantity    int32
@@ -602,7 +602,7 @@ LIMIT $1
 type GetTopSellingProductsRow struct {
 	ProductID   int32
 	Name        string
-	Price       string
+	Price       float64
 	Sku         string
 	Category    sql.NullString
 	TotalSold   int64
@@ -722,7 +722,7 @@ type ListOrdersByStoreRow struct {
 	OrderID         int32
 	UserID          int32
 	StoreID         int32
-	TotalAmount     string
+	TotalAmount     float64
 	Status          string
 	DeliveryAddress string
 	OrderDate       sql.NullTime
@@ -776,7 +776,7 @@ type ListOrdersByUserRow struct {
 	OrderID         int32
 	UserID          int32
 	StoreID         int32
-	TotalAmount     string
+	TotalAmount     float64
 	Status          string
 	DeliveryAddress string
 	OrderDate       sql.NullTime
@@ -995,8 +995,8 @@ type UpdateOrderItemParams struct {
 	OrderItemID int32
 	OrderID     int32
 	Quantity    int32
-	UnitPrice   string
-	TotalPrice  string
+	UnitPrice   float64
+	TotalPrice  float64
 }
 
 func (q *Queries) UpdateOrderItem(ctx context.Context, arg UpdateOrderItemParams) (OrderItem, error) {
@@ -1057,7 +1057,7 @@ type UpdateProductParams struct {
 	ProductID   int32
 	Name        string
 	Description sql.NullString
-	Price       string
+	Price       float64
 	Category    sql.NullString
 }
 

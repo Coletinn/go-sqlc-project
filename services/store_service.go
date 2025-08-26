@@ -1,9 +1,9 @@
 package services
 
 import (
-    "context"
-    "database/sql"
-    "sqlc-testing/db"
+	"context"
+	"database/sql"
+	"sqlc-testing/db"
 )
 
 type StoreService struct {

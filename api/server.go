@@ -35,6 +35,19 @@ func (server *Server) setupRoutes() {
 			stores.GET("/", server.getAllStores)
 			stores.POST("/", server.createStore)
 		}
+		products := api.Group("/products")
+		{
+			products.GET("/", server.getAllProducts)
+			products.GET("/id/:id", server.getProductByID)
+			products.GET("/sku/:sku", server.getProductBySKU)
+			products.POST("/", server.createProduct)
+			products.DELETE("/:id", server.deleteProduct)
+		}
+		inventory := api.Group("/inventory")
+		{
+			inventory.GET("/:id", server.getInventoryByStore)
+			inventory.POST("/", server.createInventoryItem)
+		}
 	}
 }
 
