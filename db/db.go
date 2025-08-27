@@ -24,6 +24,10 @@ type Queries struct {
 	db DBTX
 }
 
+func (q *Queries) Exec(context context.Context, s string) (any, any) {
+	panic("unimplemented")
+}
+
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
 		db: tx,

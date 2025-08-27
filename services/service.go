@@ -9,6 +9,7 @@ type Services struct {
 	Store *StoreService
 	Product *ProductService
 	StoreInventory *StoreInventoryService
+	Order *OrderService
 }
 
 func NewServices(conn *sql.DB) *Services {
@@ -17,5 +18,6 @@ func NewServices(conn *sql.DB) *Services {
 		Store: NewStoreService(conn),
 		Product: NewProductService(conn),
 		StoreInventory: NewStoreInventoryService(conn),
+		Order: NewOrderService(conn),
 	}
 }

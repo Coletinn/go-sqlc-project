@@ -43,6 +43,14 @@ func (server *Server) setupRoutes() {
 			products.POST("/", server.createProduct)
 			products.DELETE("/:id", server.deleteProduct)
 		}
+		orders := api.Group("/orders")
+		{
+			orders.GET("/user/:userId", server.getOrdersByUser)
+			orders.GET("/id/:id", server.getOrdersByID)
+			orders.POST("/", server.createOrder)
+			// Enhanced create order with items and inventory handling
+			orders.POST("/enhanced", server.createOrderEnhanced)
+		}
 		inventory := api.Group("/inventory")
 		{
 			inventory.GET("/:id", server.getInventoryByStore)

@@ -8,6 +8,7 @@ import (
 
 type StoreService struct {
     queries *db.Queries
+    db *sql.DB
 }
 
 func NewStoreService(conn *sql.DB) *StoreService {
