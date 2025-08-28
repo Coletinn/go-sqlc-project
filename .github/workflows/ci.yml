@@ -12,10 +12,6 @@ jobs:
     services:
       postgres:
         image: postgres:15
-        env:
-          POSTGRES_USER: gustavo
-          POSTGRES_PASSWORD: 1910
-          POSTGRES_DB: postgres
         ports:
           - 5432:5432
         options: >-
