@@ -6,6 +6,9 @@ services:
       - POSTGRES_USER=gustavo
       - POSTGRES_PASSWORD=1910
       - POSTGRES_DB=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
   api:
     build:
       context: .
@@ -18,3 +21,7 @@ services:
       - postgres
     entrypoint: [ "/app/wait-for.sh", "postgres:5432", "--", "/app/start.sh" ]
     command: [ "/app/main" ]
+
+volumes:
+  postgres_data:
+  
