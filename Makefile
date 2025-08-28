@@ -1,10 +1,14 @@
-DB_DSN=postgres://gustavo:1910@localhost:5432/postgres?sslmode=disable
+include .env
+export
 
 postgres:
-	docker run --name tests-postgres-db -p 5432:5432 -e POSTGRES_USER=gustavo -e POSTGRES_PASSWORD=1910 -d postgres
+	docker run --name tests-postgres-db -p 5432:5432 \
+		-e POSTGRES_USER=gustavo \
+		-e POSTGRES_PASSWORD=1910 \
+		-d postgres:15-alpine
 
 createdb:
-	docker exec -it tests-postgres-db --username=gustavo --owner=gustavo postgres
+	docker exec -it tests-postgres-db createdb --username=gustavo --owner=gustavo postgres
 
 dropdb:
 	docker exec -it tests-postgres-db dropdb postgres
