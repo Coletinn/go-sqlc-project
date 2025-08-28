@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	"os"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -18,7 +19,7 @@ import (
 // setupTestDB connects to the test database
 func setupTestDB(t *testing.T) *sql.DB {
 	t.Helper()
-	connStr := "postgresql://gustavo:1910@localhost:5432/postgres?sslmode=disable"
+	connStr := os.Getenv("DB_DSN")
 	dbConn, err := sql.Open("postgres", connStr)
 	require.NoError(t, err)
 	require.NoError(t, dbConn.Ping())

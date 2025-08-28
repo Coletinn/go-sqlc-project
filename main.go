@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"log"
+	"os"
 	"sqlc-testing/api"
 	"sqlc-testing/services"
 
@@ -11,13 +12,16 @@ import (
 
 const (
 	dbDriver      = "postgres"
-	dbSource      = "postgresql://gustavo:1910@localhost:5432/postgres?sslmode=disable"
 	serverAddress = "0.0.0.0:8080"
 )
 
 func main() {
+	dbDsn := os.Getenv("DB_DSN")
+	if dbDsn == "" {
+		log.Fatal("No DB_DSN env variable found")
+	}
 	// Connect to the database
-	conn, err := sql.Open(dbDriver, dbSource)
+	conn, err := sql.Open(dbDriver, dbDsn)
 	if err != nil {
 		log.Fatal("Cannot connect to database:", err)
 	}
