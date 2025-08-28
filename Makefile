@@ -1,5 +1,4 @@
-include .env
-export
+DB_DSN=postgres://gustavo:1910@localhost:5432/postgres?sslmode=disable
 
 postgres:
 	docker run --name tests-postgres-db -p 5432:5432 \
